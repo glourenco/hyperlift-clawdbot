@@ -16,10 +16,11 @@ This repo is a minimal, copy/paste-friendly way to run **Clawdbot Gateway** on *
 
 - **`PORT`**: Hyperlift injects this (we default to `8080` if it’s missing)
 - **`CLAWDBOT_GATEWAY_TOKEN`** (recommended): set a strong value; you’ll paste it into the Control UI  
-  - If you **don’t** set it, the container will **auto-generate** one on first boot and print it in logs.
+  - If you **don’t** set it, the container will **auto-generate** one on first boot, save it under `/root/.clawdbot/gateway.token`, and print it in logs (treat logs as sensitive).
 - **`OPENAI_API_KEY`** (recommended): set this if you want the default model (`openai/gpt-5-mini`) to work.
 
 3) **Persist state**: make sure your Hyperlift deployment persists `/root/.clawdbot` (this is where sessions/providers end up).
+   - If you rely on the auto-generated token and you **don’t** persist this directory, the token will change on redeploy.
 
 4) **Open the Control UI** at `http://<your-hyperlift-url>/` and set your token:
 - The Control UI stores the token in browser storage and uses it to connect to the gateway websocket.
@@ -28,10 +29,10 @@ This repo is a minimal, copy/paste-friendly way to run **Clawdbot Gateway** on *
 ### Local run (optional, via Docker Compose)
 
 ```bash
-# Copy env.example → .env if you want (or export vars inline).
-#   docker compose up --build
-PORT=8080 \
-CLAWDBOT_GATEWAY_TOKEN=change-me \
+# Copy env.example → .env (optional), then:
 docker compose up --build
+
+# If you didn't set CLAWDBOT_GATEWAY_TOKEN, read the generated token from logs:
+#   docker compose logs --tail 200 | grep -i 'Paste this token'
 ```
 

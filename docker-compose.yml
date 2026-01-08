@@ -17,10 +17,14 @@ services:
       OPENAI_API_KEY: ${OPENAI_API_KEY:-}
     ports:
       - "${PORT:-8080}:${PORT:-8080}"
-    volumes:
-      # Easy config edits without rebuild (overrides baked-in default config)
-      - ./clawdbot.json:/root/.clawdbot/clawdbot.json:ro
-      # Optional persisted state (uncomment to persist sessions across restarts)
-      # - ${HOME}/.clawdbot:/root/.clawdbot
+    volumes: []
+    # By default, use the config baked into the image.
+    # If you want to tweak config locally without rebuilding, add:
+    # volumes:
+    #   - ./clawdbot.json:/root/.clawdbot/clawdbot.json:ro
+    #
+    # Optional persisted state (recommended if you care about sessions across restarts):
+    # volumes:
+    #   - ${HOME}/.clawdbot:/root/.clawdbot
 
 
