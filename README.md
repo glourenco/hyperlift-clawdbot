@@ -15,8 +15,9 @@ This repo is a minimal, copy/paste-friendly way to run **Clawdbot Gateway** on *
 2) **Create a Hyperlift service** using that image and set these env vars:
 
 - **`PORT`**: Hyperlift injects this (we default to `8080` if it’s missing)
-- **`CLAWDBOT_GATEWAY_TOKEN`**: **required** (set a strong value; you’ll paste it into the Control UI)
-- **`OPENAI_API_KEY`** (optional): set this if you want to run OpenAI models
+- **`CLAWDBOT_GATEWAY_TOKEN`** (recommended): set a strong value; you’ll paste it into the Control UI  
+  - If you **don’t** set it, the container will **auto-generate** one on first boot and print it in logs.
+- **`OPENAI_API_KEY`** (recommended): set this if you want the default model (`openai/gpt-5-mini`) to work.
 
 3) **Persist state**: make sure your Hyperlift deployment persists `/root/.clawdbot` (this is where sessions/providers end up).
 

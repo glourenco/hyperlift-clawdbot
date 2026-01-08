@@ -2,7 +2,7 @@ FROM node:22-bookworm-slim
 
 # Minimal init to handle SIGTERM correctly on Hyperlift
 RUN apt-get update \
-  && apt-get install -y --no-install-recommends tini ca-certificates git \
+  && apt-get install -y --no-install-recommends tini ca-certificates git openssl \
   && rm -rf /var/lib/apt/lists/*
 
 # Install Clawdbot CLI (docs recommend global install via npm/pnpm)

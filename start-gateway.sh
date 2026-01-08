@@ -15,11 +15,20 @@ case "$CLAWDBOT_GATEWAY_BIND" in
     # No token required for loopback binds.
     ;;
   *)
-    # Non-loopback binds require auth. Fail fast to avoid confusing 1008 unauthorized loops.
+    # Non-loopback binds require auth.
+    # To support "deploy first, add env vars later", we generate a token if none is provided.
     if [ -z "${CLAWDBOT_GATEWAY_TOKEN:-}" ]; then
-      echo "ERROR: CLAWDBOT_GATEWAY_TOKEN is required when CLAWDBOT_GATEWAY_BIND is not 'loopback'." >&2
-      echo "Set CLAWDBOT_GATEWAY_TOKEN (and paste it into the Control UI) or set CLAWDBOT_GATEWAY_BIND=loopback." >&2
-      exit 2
+      token_file="/root/.clawdbot/gateway.token"
+      mkdir -p /root/.clawdbot
+      if [ -f "$token_file" ] && [ -s "$token_file" ]; then
+        CLAWDBOT_GATEWAY_TOKEN="$(cat "$token_file" | tr -d '\n' | tr -d '\r')"
+      else
+        CLAWDBOT_GATEWAY_TOKEN="$(openssl rand -hex 24)"
+        umask 077
+        printf "%s\n" "$CLAWDBOT_GATEWAY_TOKEN" > "$token_file"
+        echo "INFO: CLAWDBOT_GATEWAY_TOKEN was not set; generated one and saved to $token_file" >&2
+        echo "INFO: Paste this token into the Control UI to avoid 1008 unauthorized: $CLAWDBOT_GATEWAY_TOKEN" >&2
+      fi
     fi
     set -- "$@" --token "$CLAWDBOT_GATEWAY_TOKEN"
     ;;
