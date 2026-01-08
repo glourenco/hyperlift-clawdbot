@@ -1,0 +1,23 @@
+services:
+  clawdbot-gateway:
+    build:
+      context: .
+      args:
+        # Optional: pin for reproducible builds
+        #   CLAWDBOT_VERSION=1.2.3 docker compose up --build
+        CLAWDBOT_VERSION: ${CLAWDBOT_VERSION:-latest}
+    image: hyperlift-clawdbot:local
+    environment:
+      PORT: ${PORT:-8080}
+      # Bind defaults to "lan" in start-gateway.sh (override only if you know you need it).
+      # CLAWDBOT_GATEWAY_BIND: loopback|lan|tailnet|auto
+      CLAWDBOT_GATEWAY_TOKEN: ${CLAWDBOT_GATEWAY_TOKEN:-change-me}
+    ports:
+      - "${PORT:-8080}:${PORT:-8080}"
+    volumes:
+      # Easy config edits without rebuild (overrides baked-in default config)
+      - ./clawdbot.json:/root/.clawdbot/clawdbot.json:ro
+      # Optional persisted state (uncomment to persist sessions across restarts)
+      # - ${HOME}/.clawdbot:/root/.clawdbot
+
+
