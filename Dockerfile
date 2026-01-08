@@ -26,10 +26,5 @@ RUN chmod +x /usr/local/bin/start-gateway
 EXPOSE 8080
 
 ENTRYPOINT ["/usr/bin/tini", "--"]
-
-# Uses Hyperlift-provided env vars:
-# - PORT (default 8080)
-# - CLAWDBOT_GATEWAY_BIND (optional)
-# - CLAWDBOT_GATEWAY_TOKEN (optional, recommended for non-loopback binds)
 CMD ["/usr/local/bin/start-gateway"]
 

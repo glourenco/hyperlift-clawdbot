@@ -27,8 +27,7 @@ This repo is a minimal, copy/paste-friendly way to run **Clawdbot Gateway** on *
 
 ```bash
 # Copy env.example → .env if you want (or export vars inline).
-# Optional: pin version for reproducible builds:
-#   CLAWDBOT_VERSION=1.2.3 docker compose up --build
+#   docker compose up --build
 PORT=8080 \
 CLAWDBOT_GATEWAY_TOKEN=change-me \
 docker compose up --build
