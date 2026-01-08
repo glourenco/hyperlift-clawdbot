@@ -16,8 +16,10 @@ Fork it, customize `clawdbot.json` for your needs, and use it as the source for 
 - **`CLAWDBOT_GATEWAY_TOKEN`** (recommended): set a strong value; you’ll paste it into the Control UI  
 - **`OPENAI_API_KEY`** (recommended): set this if you want the **example model configured in `clawdbot.json`** (`openai/gpt-5-mini`) to work.
 
-3) **Persist state**: make sure your Hyperlift deployment persists `/root/.clawdbot` (this is where sessions/providers end up).
-   - If you rely on the auto-generated token and you **don’t** persist this directory, the token will change on redeploy.
+3) **Important: Hyperlift persistence**
+   - Hyperlift currently **does not provide persistent storage** for this service, so `/root/.clawdbot` is ephemeral.
+   - This means **sessions/provider logins and any auto-generated token will be lost on redeploy/restart**.
+   - To avoid losing access, **set `CLAWDBOT_GATEWAY_TOKEN` explicitly** in Hyperlift env vars (don’t rely on the generated one).
 
 4) **Open the Control UI** at `http://<your-hyperlift-url>/` and set your token:
 - The Control UI stores the token in browser storage and uses it to connect to the gateway websocket.
