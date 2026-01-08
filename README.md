@@ -23,18 +23,3 @@ Fork it, customize `clawdbot.json` for your needs, and use it as the source for 
 - The Control UI stores the token in browser storage and uses it to connect to the gateway websocket.
 - If you see “disconnected (1008): unauthorized”, the UI doesn’t have the right token yet.
 
-### Local run (optional)
-
-```bash
-# Build:
-docker build -t hyperlift-clawdbot:local .
-
-# Run (set env vars inline or via your shell):
-PORT=8080 \
-CLAWDBOT_GATEWAY_TOKEN=change-me \
-OPENAI_API_KEY=sk-... \
-docker run --rm -p 8080:8080 \
-  -e PORT -e CLAWDBOT_GATEWAY_TOKEN -e OPENAI_API_KEY \
-  hyperlift-clawdbot:local
-```
-
