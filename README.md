@@ -1,6 +1,7 @@
 ## hyperlift-clawdbot
 
-This repo is a minimal, copy/paste-friendly way to run **Clawdbot Gateway** on **Starlight Hyperlift**.
+This repo is a **ready-to-fork template** for running **Clawdbot Gateway** on **Starlight Hyperlift** with sane defaults.
+Fork it, customize `clawdbot.json` for your needs, and use it as the source for your Hyperlift service.
 
 ### What you get
 
@@ -10,14 +11,10 @@ This repo is a minimal, copy/paste-friendly way to run **Clawdbot Gateway** on *
 
 ### Hyperlift (tutorial)
 
-1) **Build and push** this image to wherever Hyperlift pulls images from.
+1) **Create a Hyperlift service** from your fork and set these env vars:
 
-2) **Create a Hyperlift service** using that image and set these env vars:
-
-- **`PORT`**: Hyperlift injects this (we default to `8080` if it’s missing)
 - **`CLAWDBOT_GATEWAY_TOKEN`** (recommended): set a strong value; you’ll paste it into the Control UI  
-  - If you **don’t** set it, the container will **auto-generate** one on first boot, save it under `/root/.clawdbot/gateway.token`, and print it in logs (treat logs as sensitive).
-- **`OPENAI_API_KEY`** (recommended): set this if you want the default model (`openai/gpt-5-mini`) to work.
+- **`OPENAI_API_KEY`** (recommended): set this if you want the **example model configured in `clawdbot.json`** (`openai/gpt-5-mini`) to work.
 
 3) **Persist state**: make sure your Hyperlift deployment persists `/root/.clawdbot` (this is where sessions/providers end up).
    - If you rely on the auto-generated token and you **don’t** persist this directory, the token will change on redeploy.
@@ -26,13 +23,18 @@ This repo is a minimal, copy/paste-friendly way to run **Clawdbot Gateway** on *
 - The Control UI stores the token in browser storage and uses it to connect to the gateway websocket.
 - If you see “disconnected (1008): unauthorized”, the UI doesn’t have the right token yet.
 
-### Local run (optional, via Docker Compose)
+### Local run (optional)
 
 ```bash
-# Copy env.example → .env (optional), then:
-docker compose up --build
+# Build:
+docker build -t hyperlift-clawdbot:local .
 
-# If you didn't set CLAWDBOT_GATEWAY_TOKEN, read the generated token from logs:
-#   docker compose logs --tail 200 | grep -i 'Paste this token'
+# Run (set env vars inline or via your shell):
+PORT=8080 \
+CLAWDBOT_GATEWAY_TOKEN=change-me \
+OPENAI_API_KEY=sk-... \
+docker run --rm -p 8080:8080 \
+  -e PORT -e CLAWDBOT_GATEWAY_TOKEN -e OPENAI_API_KEY \
+  hyperlift-clawdbot:local
 ```
 
